@@ -21,7 +21,7 @@ public class Conexao {
         System.out.println("Conectando ao banco...");
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            con =  DriverManager.getConnection("jdbc:mysql://savioliti.com.br/saviolit_supermercado","saviolit_aulati","@ulaTI2021");
+            con =  DriverManager.getConnection("jdbc:mysql://127.0.0.1/saviolit_supermercado","root","");
             System.out.println("Conectado.");
         } catch (ClassNotFoundException ex) {
             System.out.println("Classe não encontrada, adicione o driver nas bibliotecas.");

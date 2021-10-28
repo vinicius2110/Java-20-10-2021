@@ -5,6 +5,11 @@
  */
 package Supermecado;
 
+import static Supermecado.Conexao.con;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author c02maq1
@@ -16,6 +21,7 @@ public class Tela_Produtos extends javax.swing.JFrame {
      */
     public Tela_Produtos() {
         initComponents();
+        Conexao.Conectar();
     }
 
     /**
@@ -51,11 +57,13 @@ public class Tela_Produtos extends javax.swing.JFrame {
         txtValorVenda = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         btnCadastrar = new javax.swing.JButton();
+        btnGravar = new javax.swing.JButton();
         btnDeletar = new javax.swing.JButton();
+        btnSair = new javax.swing.JButton();
         btnPesquisar = new javax.swing.JButton();
         btnAlterar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Produtos");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Produto"));
@@ -68,7 +76,7 @@ public class Tela_Produtos extends javax.swing.JFrame {
 
         jLabel4.setText("Lote anterior");
 
-        jLabel5.setText("Data trocalote");
+        jLabel5.setText("Data troca lote");
 
         jLabel6.setText("Custo");
 
@@ -200,9 +208,23 @@ public class Tela_Produtos extends javax.swing.JFrame {
             }
         });
 
+        btnGravar.setText("Gravar");
+
         btnDeletar.setText("Deletar");
 
+        btnSair.setText("Sair");
+        btnSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSairActionPerformed(evt);
+            }
+        });
+
         btnPesquisar.setText("Pesquisar");
+        btnPesquisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPesquisarActionPerformed(evt);
+            }
+        });
 
         btnAlterar.setText("Alterar");
 
@@ -216,7 +238,9 @@ public class Tela_Produtos extends javax.swing.JFrame {
                     .addComponent(btnCadastrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnPesquisar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnAlterar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnDeletar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnDeletar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnGravar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnSair, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -224,13 +248,17 @@ public class Tela_Produtos extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnPesquisar)
-                .addGap(59, 59, 59)
+                .addGap(28, 28, 28)
                 .addComponent(btnCadastrar)
-                .addGap(78, 78, 78)
-                .addComponent(btnAlterar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+                .addGap(31, 31, 31)
                 .addComponent(btnDeletar)
-                .addContainerGap())
+                .addGap(34, 34, 34)
+                .addComponent(btnAlterar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addComponent(btnGravar)
+                .addGap(29, 29, 29)
+                .addComponent(btnSair)
+                .addGap(21, 21, 21))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -241,8 +269,8 @@ public class Tela_Produtos extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(60, Short.MAX_VALUE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(55, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -276,7 +304,86 @@ public class Tela_Produtos extends javax.swing.JFrame {
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
         // TODO add your handling code here:
+        String sql;
+        String descricao, unidade,loteAtual, loteAnterior, dataTrocaLote, custo, margem, idFornecedorAtual, idFornecedorAnterior, valorVenda;
+        String imagem = "vazia";
+        descricao = txtDescricao.getText();
+        unidade = txtUnidade.getText();
+        loteAtual = txtLoteAtual.getText();
+        loteAnterior = txtLoteAnterior.getText();
+        dataTrocaLote = txtDataTrocaLote.getText();
+        custo = txtCusto.getText();
+        margem = txtMargem.getText();
+        idFornecedorAtual = txtIdFornecedorAtual.getText();
+        idFornecedorAnterior = txtIdFornecedorAnterior.getText();
+        valorVenda = txtValorVenda.getText();
+        try{
+            sql="insert into produto (descricao, unidade, lote_atual, lote_anterior,"
+            + " data_troca_lote, custo, margem, id_fornec_atual, id_fornec_anterior, vl_venda, imagem) values ('"
+            + descricao + "','" + unidade +"','" + loteAtual + "','"+ loteAnterior + "',"
+            + dataTrocaLote +"," + custo + ","+ margem + ","+ idFornecedorAtual + ","
+            + idFornecedorAnterior + "," + valorVenda + ",'" + imagem + "')";
+
+            Statement stm = con.prepareStatement(sql);
+            stm.execute(sql);
+            txtDescricao.setText("");
+            txtUnidade.setText("");
+            txtLoteAtual.setText("");
+            txtLoteAnterior.setText("");
+            txtDataTrocaLote.setText("");
+            txtCusto.setText("");
+            txtMargem.setText("");
+            txtIdFornecedorAtual.setText("");
+            txtIdFornecedorAnterior.setText("");
+            txtValorVenda.setText("");
+            //txtNome.requestFocus();
+
+        }
+        catch(Exception e){
+
+            JOptionPane.showMessageDialog(null, "Erro ao incluir, tente novamente" + e,"ERRO",JOptionPane.INFORMATION_MESSAGE);
+
+        }
     }//GEN-LAST:event_btnCadastrarActionPerformed
+
+    private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
+        // Pesquisar registro
+        String sql;
+        //model.setRowCount(0); //limpa a tabela toda vez que clicar no botao consultar
+        try{
+            sql = "select * from clientes where nome = '" + txtDescricao.getText() + "' order by codigo desc"; //cria a instrução de pesquisa
+            //a partir do nome digitado no campo tfNome
+
+            Statement stm = con.createStatement(); //cria uma declaracao stm para a variavel con de conexao
+
+            ResultSet rs = stm.executeQuery(sql); // cria uma variavel rs como resultset (resultado) da execucao da consulta sql
+            rs.first();  //move o ponteiro do BD para o primeiro registro
+
+            String[] linha= new String[]{rs.getString("codigo"),rs.getString("nome"),
+                rs.getString("endereco"),rs.getString("telefone"),rs.getString("celular")
+                ,rs.getString("email")}; // cria um vetor chmado linha que contem o resultado da pesquisa com todos os campos
+
+        } catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Erro ao consultar, tente novamente"
+                ,"ERRO",JOptionPane.INFORMATION_MESSAGE);
+            //mostra caixa de mensagem de erro com icone de informacao
+        }
+    }//GEN-LAST:event_btnPesquisarActionPerformed
+
+    private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
+        // TODO add your handling code here:
+        Menu menu = new Menu();
+        menu.setVisible(true);
+        
+        this.setVisible(false);
+        
+        try{
+            Conexao.con.close();
+            //System.exit(0);
+        } catch (Exception e){
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_btnSairActionPerformed
 
     /**
      * @param args the command line arguments
@@ -317,7 +424,9 @@ public class Tela_Produtos extends javax.swing.JFrame {
     private javax.swing.JButton btnAlterar;
     private javax.swing.JButton btnCadastrar;
     private javax.swing.JButton btnDeletar;
+    private javax.swing.JButton btnGravar;
     private javax.swing.JButton btnPesquisar;
+    private javax.swing.JButton btnSair;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;

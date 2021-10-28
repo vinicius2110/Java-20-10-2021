@@ -32,6 +32,7 @@ public class Menu extends javax.swing.JFrame {
         MenuClientes = new javax.swing.JMenuItem();
         MenuProdutos = new javax.swing.JMenuItem();
         MenuFornecedor = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         MenuSair = new javax.swing.JMenuItem();
 
@@ -63,6 +64,14 @@ public class Menu extends javax.swing.JFrame {
             }
         });
         jMenu1.add(MenuFornecedor);
+
+        jMenuItem1.setText("Vendas");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
 
         jMenuBar1.add(jMenu1);
 
@@ -103,16 +112,22 @@ public class Menu extends javax.swing.JFrame {
     private void MenuProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuProdutosActionPerformed
        Tela_Produtos produtos = new Tela_Produtos();
        produtos.setVisible(true);
+       
+       this.setVisible(false);
     }//GEN-LAST:event_MenuProdutosActionPerformed
 
     private void MenuClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuClientesActionPerformed
         Tela_Clientes clientes = new Tela_Clientes();
         clientes.setVisible(true);
+        
+        this.setVisible(false);
     }//GEN-LAST:event_MenuClientesActionPerformed
 
     private void MenuFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuFornecedorActionPerformed
         Tela_Fornecedor fornecedor = new Tela_Fornecedor();
         fornecedor.setVisible(true);
+        
+        this.setVisible(false);
     }//GEN-LAST:event_MenuFornecedorActionPerformed
 
     private void jMenu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu2ActionPerformed
@@ -122,13 +137,18 @@ public class Menu extends javax.swing.JFrame {
 
     private void MenuSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuSairActionPerformed
         // TODO add your handling code here:
-        try{
-            //Conexao.con.close();
-            System.exit(0);
-        } catch (Exception e){
-            System.out.println(e);
-        }
+        
+        System.exit(0);
+        
     }//GEN-LAST:event_MenuSairActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        Tela_Venda venda = new Tela_Venda();
+        venda.setVisible(true);
+        
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -173,5 +193,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     // End of variables declaration//GEN-END:variables
 }

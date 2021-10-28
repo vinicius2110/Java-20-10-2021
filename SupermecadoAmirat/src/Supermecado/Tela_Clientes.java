@@ -61,8 +61,10 @@ public class Tela_Clientes extends javax.swing.JFrame {
         btnDeletar = new javax.swing.JButton();
         btnPesquisar = new javax.swing.JButton();
         btnAlterar = new javax.swing.JButton();
+        btnGravar = new javax.swing.JButton();
+        btnSair = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Clientes");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -215,6 +217,15 @@ public class Tela_Clientes extends javax.swing.JFrame {
 
         btnAlterar.setText("Alterar");
 
+        btnGravar.setText("Gravar");
+
+        btnSair.setText("Sair");
+        btnSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSairActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -225,7 +236,9 @@ public class Tela_Clientes extends javax.swing.JFrame {
                     .addComponent(btnCadastrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnPesquisar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnAlterar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnDeletar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnDeletar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnGravar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnSair, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -233,13 +246,17 @@ public class Tela_Clientes extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnPesquisar)
-                .addGap(59, 59, 59)
+                .addGap(28, 28, 28)
                 .addComponent(btnCadastrar)
-                .addGap(78, 78, 78)
-                .addComponent(btnAlterar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+                .addGap(31, 31, 31)
                 .addComponent(btnDeletar)
-                .addContainerGap())
+                .addGap(34, 34, 34)
+                .addComponent(btnAlterar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addComponent(btnGravar)
+                .addGap(29, 29, 29)
+                .addComponent(btnSair)
+                .addGap(21, 21, 21))
         );
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 20, 100, 330));
@@ -275,9 +292,11 @@ public class Tela_Clientes extends javax.swing.JFrame {
         cidade = txtCidade.getText();
         uf = txtUf.getText();
         try{
-            sql="insert into clientes (codigo, nome, endereco, telefone, celular,"
-                + " email) values ("  + codigo + ",'" + nome + "','" + endereco 
-                +"','" + telefone + "','"+ celular + "','" + email +"')";
+            sql="insert into cliente (id, nome, cpf, rg, telefone,"
+                + " email, endereco, cep, bairro, cidade, uf) values (DEFAULT, '"
+                + nome + "','" + cpf +"','" + rg + "','"+ telefone + "','"
+                + email +"','" + endereco + "','"+ cep + "','"+ bairro + "','"
+                + cidade + "','" + uf + "')";
         
         
            
@@ -309,7 +328,7 @@ public class Tela_Clientes extends javax.swing.JFrame {
         String sql;
         //model.setRowCount(0); //limpa a tabela toda vez que clicar no botao consultar
         try{
-            sql = "select * from clientes where nome = '" + tfNome.getText() + "' order by codigo desc"; //cria a instrução de pesquisa
+            sql = "select * from cliente where nome = '" + txtNome.getText(); //cria a instrução de pesquisa
             //a partir do nome digitado no campo tfNome
 
             Statement stm = con.createStatement(); //cria uma declaracao stm para a variavel con de conexao
@@ -317,9 +336,31 @@ public class Tela_Clientes extends javax.swing.JFrame {
             ResultSet rs = stm.executeQuery(sql); // cria uma variavel rs como resultset (resultado) da execucao da consulta sql
             rs.first();  //move o ponteiro do BD para o primeiro registro
 
-            String[] linha= new String[]{rs.getString("codigo"),rs.getString("nome"),
-                rs.getString("endereco"),rs.getString("telefone"),rs.getString("celular")
-                ,rs.getString("email")}; // cria um vetor chmado linha que contem o resultado da pesquisa com todos os campos
+            String[] linha= new String[]{
+                rs.getString("id"),
+                rs.getString("nome"),
+                rs.getString("cpf"),
+                rs.getString("rg"),
+                rs.getString("telefone"),
+                rs.getString("email"),
+                rs.getString("endereco"),
+                rs.getString("cep"),
+                rs.getString("bairro"),
+                rs.getString("cidade"),
+                rs.getString("uf"),
+                
+            }; // cria um vetor chmado linha que contem o resultado da pesquisa com todos os campos
+            
+            txtNome.setText(linha[0]);
+            txtCpf.setText(linha[1]);
+            txtRg.setText(linha[2]);
+            txtTelefone.setText(linha[3]);
+            txtEmail.setText(linha[4]);
+            txtEndereco.setText(linha[5]);
+            txtCep.setText(linha[6]);
+            txtBairro.setText(linha[7]);
+            txtCidade.setText(linha[8]);
+            txtUf.setText(linha[9]);
 
         } catch(Exception e){
             JOptionPane.showMessageDialog(null, "Erro ao consultar, tente novamente"
@@ -327,6 +368,21 @@ public class Tela_Clientes extends javax.swing.JFrame {
             //mostra caixa de mensagem de erro com icone de informacao
         }
     }//GEN-LAST:event_btnPesquisarActionPerformed
+
+    private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
+        // TODO add your handling code here:
+        Menu menu = new Menu();
+        menu.setVisible(true);
+        
+        this.setVisible(false);
+        
+        try{
+            Conexao.con.close();
+            //System.exit(0);
+        } catch (Exception e){
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_btnSairActionPerformed
 
     /**
      * @param args the command line arguments
@@ -367,7 +423,9 @@ public class Tela_Clientes extends javax.swing.JFrame {
     private javax.swing.JButton btnAlterar;
     private javax.swing.JButton btnCadastrar;
     private javax.swing.JButton btnDeletar;
+    private javax.swing.JButton btnGravar;
     private javax.swing.JButton btnPesquisar;
+    private javax.swing.JButton btnSair;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
